@@ -41,6 +41,11 @@ class MainWindow(MainWindow):
 
 		self.setCentralWidget(self.widget)
 
+	def init_style(self):
+		palette = QPalette()
+		palette.setColor(QPalette.ColorRole.Window, QColor(32, 32, 32, 255))
+		palette.setColor(QPalette.ColorRole.Text, QColor(255, 255, 255, 255))
+		self.setPalette(palette)
 
 if __name__ == "__main__":
 

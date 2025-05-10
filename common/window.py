@@ -22,12 +22,7 @@ class MainWindow(QMainWindow):
 		self.main_layout = QVBoxLayout()
 
 	def init_style(self):
-		palette = QPalette()
-		palette.setColor(QPalette.ColorRole.Window, QColor(32, 32, 32, 255))
-		palette.setColor(QPalette.ColorRole.Text, QColor(255, 255, 255, 255))
-		self.setPalette(palette)
-
-	
+		pass
 
 	def create_section_title(self, parent_layout: QLayout, text="", tooltip=""):
 		layout_title_widget = self.create_label(text)

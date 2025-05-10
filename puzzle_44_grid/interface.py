@@ -29,6 +29,8 @@ APP_NAME = "Blue Prince 44 Puzzle Helper"
 # Subclass QMainWindow to customize your application's main window
 class Puzzle44GridWindow(MainWindow):
 	def __init__(self):
+		helper.load_hints()
+
 		super().__init__()
 
 	def init_ui(self):
@@ -162,7 +164,7 @@ class Puzzle44GridWindow(MainWindow):
 
 	def _highlight_matching_hints_and_solution(self, index:int, hint_input:QWidget, solution:QWidget, hint_default_css="", solution_default_css=""):
 		# check if focused widget is one of the inputs, highlight it and the corresponding solution label
-		if self.focusWidget() == hint_input:
+		if self.widget.focusWidget() == hint_input:
 			hint_input.setStyleSheet(
 				"border: 1px solid black;"
 				f"background: {COLOR.SELECT};"
@@ -218,12 +220,3 @@ class Puzzle44GridWindow(MainWindow):
 			self.solution_layout.addWidget(self.create_label(**rank_label_settings), row, 0)
 			self.solution_layout.addWidget(self.create_label(**rank_label_settings), row, GRID_WIDTH+1)
 
-def start():
-	helper.load_hints()
-	window = Puzzle44GridWindow()
-	window.show()
-
-# 	helper.clues = [i.text() for i in window.hint_input_widgets]
-#	helper.save_hints()
-
-	return window
