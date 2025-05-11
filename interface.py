@@ -1,17 +1,14 @@
 import sys
-sys.path.append("common")
-sys.path.append("puzzle_44_grid")
-
 import logging
 
-from puzzle_44_grid.interface import Puzzle44GridWindow
+from puzzle_44_grid.interface import Puzzle44GridTab
+from puzzle_gallery.interface import PuzzleGalleryTab
 
-from common.window import MainWindow
 from typing import Union, Optional
 from PyQt6.QtCore import QSize, QUrl, Qt, QTimer
 from PyQt6.QtWidgets import (
 	QApplication,
-	QWidget, QMainWindow, QLayout,
+	QWidget, QMainWindow,
 	QLabel, QTabWidget,
 	QHBoxLayout, QVBoxLayout, QGridLayout, QSizePolicy
 )
@@ -21,18 +18,26 @@ from PyQt6.QtGui import QPalette, QColor
 APP_NAME = "Blue Prince Helper"
 logging.basicConfig(level=logging.INFO)
 
-class MainWindow(MainWindow):
+class MainWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
+		self.init_ui()
+		self.init_style()
 
 	def init_ui(self):
-		super().init_ui()
+		self.WINDOW_WIDTH = 500
+		self.WINDOW_HEIGHT = 500
 
 		self.tab = QTabWidget()
+		self.main_layout = QVBoxLayout()
 		
 		# initialize tabs
-		self.puzzle_44_grid_window = Puzzle44GridWindow()
-		self.tab.addTab(self.puzzle_44_grid_window.widget, "44 Grids")
+		self.puzzle_44_grid_tab = Puzzle44GridTab()
+		self.tab.addTab(self.puzzle_44_grid_tab.widget, "44 Grids")
+		
+		self.puzzle_gallery_tab = PuzzleGalleryTab()
+		self.tab.addTab(self.puzzle_gallery_tab.widget, "Gallery")
+		
 
 		self.main_layout.addWidget(self.tab)
 		
@@ -56,3 +61,6 @@ if __name__ == "__main__":
 	window.show()
 
 	app.exec()
+
+	# save hints when window close
+	window.puzzle_44_grid_tab.autosave()

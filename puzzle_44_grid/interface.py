@@ -1,10 +1,11 @@
 import sys
 
 import logging
-import helper
 
-from color import COLOR
-from common.window import MainWindow
+from puzzle_44_grid import helper
+from puzzle_44_grid.color import COLOR
+
+from common.subtab import Subtab
 from typing import Union, Optional
 from PyQt6.QtCore import QSize, QUrl, Qt, QTimer
 from PyQt6.QtWidgets import (
@@ -27,19 +28,17 @@ INTERFACE_AUTOSAVE_FREQ = 120000 # auto save times (2 minutes)
 APP_NAME = "Blue Prince 44 Puzzle Helper"
 
 # Subclass QMainWindow to customize your application's main window
-class Puzzle44GridWindow(MainWindow):
+class Puzzle44GridTab(Subtab):
 	def __init__(self):
-		helper.load_hints()
-
 		super().__init__()
 
-	def init_ui(self):
-		super().init_ui()
+		helper.load_hints()
+
+		self.main_layout = QVBoxLayout()
+		self.widget.setLayout(self.main_layout)
 
 		self.init_hint_grid()
 		self.init_solution_grid()
-		
-		# set tooltip css
 		
 		####################################
 		# POST LAYOUT INIT
@@ -73,11 +72,6 @@ class Puzzle44GridWindow(MainWindow):
 		self.hint_input_widgets[ANTICHAMBER_INDEX].setText("Antichamber")
 		self.hint_input_widgets[ANTICHAMBER_INDEX].setEnabled(False)
 
-		self.widget = QWidget()
-		self.widget.setLayout(self.main_layout)
-
-		self.setCentralWidget(self.widget)
-
 		# sets up timer check
 		self.form_update() # update first
 		self.timer = QTimer()
@@ -87,8 +81,6 @@ class Puzzle44GridWindow(MainWindow):
 		self.autosave_timer = QTimer()
 		self.autosave_timer.timeout.connect(self.autosave)
 		self.autosave_timer.start(INTERFACE_AUTOSAVE_FREQ)
-
-		self.setFixedSize(700, 1000) # disables resizing
 
 	def autosave(self):
 		logging.info("Auto saving...")
