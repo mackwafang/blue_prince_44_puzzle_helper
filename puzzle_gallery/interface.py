@@ -12,7 +12,7 @@ from PyQt6.QtCore import QSize, QUrl, Qt, QTimer
 from PyQt6.QtWidgets import (
 	QApplication,
 	QWidget, QMainWindow, QLayout,
-	QPushButton, QLineEdit, QScrollArea, QLabel,
+	QPushButton, QLineEdit, QScrollArea, QLabel, QProgressBar,
 	QHBoxLayout, QVBoxLayout, QGridLayout, QSizePolicy
 )
 from PyQt6.QtGui import QPalette, QColor
@@ -58,6 +58,10 @@ class PuzzleGalleryTab(Subtab):
 		self.hint_clear_button.released.connect(self._clear_hints)
 		self.main_layout.addWidget(self.hint_clear_button)
 
+		# adds progress bar for longer progress
+		self.progress_bar = QProgressBar()
+		self.main_layout.addWidget(self.progress_bar)
+
 
 		self.create_section_title(
 			self.main_layout,
@@ -72,7 +76,7 @@ class PuzzleGalleryTab(Subtab):
 		
 		# adds input for paste hints
 		self.hint_input_widgets = [self.create_input() for i in range(GRID_COUNT)]
-		self.hint_input_widget_pos = [(index // GRID_WIDTH, index % GRID_WIDTH) for index in range(GRID_COUNT)]
+		self.hint_input_widget_pos = [(index // GRID_WIDTH, (index % GRID_WIDTH)+1) for index in range(GRID_COUNT)]
 		for wi, widget in enumerate(self.hint_input_widgets):
 			widget.setMaxLength(1)
 			widget.textChanged.connect(self._cursor_automove)
@@ -95,7 +99,10 @@ class PuzzleGalleryTab(Subtab):
 		hints = [''.join(hints[col::GRID_WIDTH]) for col in range(GRID_WIDTH)]
 			
 		solution_length = sum(1 for h in hints if len(h) > 0)
-		solutions = helper.create_possible_words([col for col in hints if len(col) > 0], solution_length)
+		solutions = helper.create_possible_words(
+			self.progress_bar,
+			[col for col in hints if len(col) > 0]
+		)
 		
 		logging.info(f"Found {len(solutions)} solutions")
 
