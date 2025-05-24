@@ -39,6 +39,11 @@ class PuzzleGalleryTab(Subtab):
 			text="Hints", 
 			tooltip=
 				"Place your hints in a square.\n"
+				"> Start at column 1 and the left most letter in the gallery\n"
+				"> Cycle through the choices of the first letter and enter each letter into the columns\n"
+				"> Repeat until you have no more letter for this painting\n"
+				"> Press submit until you ran out of letters\n"
+				"> A list of possible words are generated after submitting (May take a while for 8 words)\n"
 		)
 		self.main_layout.addLayout(self.hints_layout) # add hints layout
 
@@ -67,16 +72,20 @@ class PuzzleGalleryTab(Subtab):
 			self.main_layout,
 			text="Solution",
 			tooltip=
-				"Your solution is below.\n"
+				"Your solution is below."
 		)
 		self.main_layout.addLayout(self.solution_layout) # add solution layout
 	
 	def init_hint_grid(self):
 		self.hints_layout = QGridLayout()
 		
-		# adds input for paste hints
+		# adds label to indicate to user where to stop
+		for i in [1, 5, 6, 7, 8]:
+			self.hints_layout.addWidget(self.create_label(f"{i}", css_override="border: none; color: white;"), 0, i-1)
+
+		# adds input for add letters
 		self.hint_input_widgets = [self.create_input() for i in range(GRID_COUNT)]
-		self.hint_input_widget_pos = [(index // GRID_WIDTH, (index % GRID_WIDTH)+1) for index in range(GRID_COUNT)]
+		self.hint_input_widget_pos = [((index // GRID_WIDTH)+1, index % GRID_WIDTH) for index in range(GRID_COUNT)]
 		for wi, widget in enumerate(self.hint_input_widgets):
 			widget.setMaxLength(1)
 			widget.textChanged.connect(self._cursor_automove)
@@ -94,7 +103,7 @@ class PuzzleGalleryTab(Subtab):
 		
 	def _submit_hints(self):
 		logging.info("Submitted gallery hints")
-
+		
 		hints = [i.text() for i in self.hint_input_widgets]
 		hints = [''.join(hints[col::GRID_WIDTH]) for col in range(GRID_WIDTH)]
 			

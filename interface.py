@@ -63,4 +63,4 @@ if __name__ == "__main__":
 	app.exec()
 
 	# save hints when window close
-	window.puzzle_44_grid_tab.autosave()
+	window.puzzle_44_grid_tab.save_hints()

@@ -81,9 +81,16 @@ class Puzzle44GridTab(Subtab):
 		self.autosave_timer = QTimer()
 		self.autosave_timer.timeout.connect(self.autosave)
 		self.autosave_timer.start(INTERFACE_AUTOSAVE_FREQ)
-
+	
 	def autosave(self):
 		logging.info("Auto saving...")
+		self.save_hints()
+
+	def save_hints(self):
+		logging.info("Saving hints...")
+		# setting the solution to the clues
+		for i, widget in enumerate(self.hint_input_widgets):
+			helper.clues[i] = widget.text()
 		helper.save_hints()
 
 	def form_update(self):
@@ -193,7 +200,7 @@ class Puzzle44GridTab(Subtab):
 
 		# add rank columns in rows
 		for row in range(GRID_HEIGHT):
-			rank_label_settings = {"label": f"{9-row}", "css_override": "border: none; color: {COLOR.HINT.UNFILLED};"}
+			rank_label_settings = {"label": f"{9-row}", "css_override": "border: none; color: white;"}
 			self.hints_layout.addWidget(self.create_label(**rank_label_settings), row, 0)
 			self.hints_layout.addWidget(self.create_label(**rank_label_settings), row, GRID_WIDTH+1)
 
@@ -211,7 +218,7 @@ class Puzzle44GridTab(Subtab):
 
 		# add rank columns in rows
 		for row in range(GRID_HEIGHT):
-			rank_label_settings = {"label": f"{9-row}", "css_override": "border: none; color: {COLOR.HINT.UNFILLED};"}
+			rank_label_settings = {"label": f"{9-row}", "css_override": "border: none; color: white;"}
 			self.solution_layout.addWidget(self.create_label(**rank_label_settings), row, 0)
 			self.solution_layout.addWidget(self.create_label(**rank_label_settings), row, GRID_WIDTH+1)
 
