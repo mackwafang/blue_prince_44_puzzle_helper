@@ -101,17 +101,18 @@ class Puzzle44GridTab(Subtab):
 				index,
 				hint_input, 
 				label, 
-				hint_default_css="border: 1px solid black; background-color: white;",
-				solution_default_css="border: 1px solid black; background-color: none;"
+				hint_default_css=f"border: 1px solid black; background-color: {COLOR.HINT.UNFILLED};",
+				solution_default_css=f"border: 1px solid black; background-color: {COLOR.HINT.UNFILLED};"
 			)
 
 			# guards statements
 			if len(hint_input_text) == 0:
 				continue
 
+			# format cell based on what was inputted
 			if "," not in hint_input_text:
 				hint_input.setStyleSheet(
-					f"border: 1px solid {COLOR.HINT.INPUT_MISSING};"
+					f"border: 1px solid {COLOR.HINT.INPUT_MISSING}; background-color: {COLOR.HINT.UNFILLED};"
 				)
 				# set specific color to antichamber
 				# this is here rather than _highlight_matching_hints_and_solution
@@ -131,17 +132,19 @@ class Puzzle44GridTab(Subtab):
 					f"background-color: {COLOR.HINT.FILLED};"
 				)
 
-			# split the hint and update label
+			# parse hint and update label
 			hints = [i.strip() for i in hint_input_text.split(",")][:2]
-
 			solution = helper.diff_word(*hints).upper()
 			label.setText(solution)
-			# set color based on solution
-			style = "border: 1px solid black;"
-			if len(solution) == 1:
+
+			# set color of the solution cell based on the input
+			style = "border: 1px solid white;" # default cell color
+			if len(solution) == 1: 
+				# there is an a solution
 				style += f"background-color: {COLOR.SOLUTION.EXACT}; font-weight: bold;"
 				hint_input.setStyleSheet(f"background-color: {COLOR.HINT.EXACT}")
 			elif len(solution) > 1:
+				# the hint inputted was not correct (i.e. differences between words is more than 1 character
 				style += f"background-color: {COLOR.SOLUTION.CHECK};"
 
 			label.setStyleSheet(style)
@@ -190,7 +193,7 @@ class Puzzle44GridTab(Subtab):
 
 		# add rank columns in rows
 		for row in range(GRID_HEIGHT):
-			rank_label_settings = {"label": f"{9-row}", "css_override": "border: none; color: white;"}
+			rank_label_settings = {"label": f"{9-row}", "css_override": "border: none; color: {COLOR.HINT.UNFILLED};"}
 			self.hints_layout.addWidget(self.create_label(**rank_label_settings), row, 0)
 			self.hints_layout.addWidget(self.create_label(**rank_label_settings), row, GRID_WIDTH+1)
 
@@ -208,7 +211,7 @@ class Puzzle44GridTab(Subtab):
 
 		# add rank columns in rows
 		for row in range(GRID_HEIGHT):
-			rank_label_settings = {"label": f"{9-row}", "css_override": "border: none; color: white;"}
+			rank_label_settings = {"label": f"{9-row}", "css_override": "border: none; color: {COLOR.HINT.UNFILLED};"}
 			self.solution_layout.addWidget(self.create_label(**rank_label_settings), row, 0)
 			self.solution_layout.addWidget(self.create_label(**rank_label_settings), row, GRID_WIDTH+1)
 
