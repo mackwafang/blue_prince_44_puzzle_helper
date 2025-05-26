@@ -57,7 +57,7 @@ class Subtab():
 		text_field.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
 		text_field.setFixedSize(QSize(100,  50))
 		text_field.setPlaceholderText("Hint1 Hint2")
-		return text_field
+		return text_field 
 
 	def create_label(self, label="", css_override=""):
 		"""
