@@ -3,6 +3,7 @@ import logging
 
 from puzzle_44_grid.interface import Puzzle44GridTab
 from puzzle_gallery.interface import PuzzleGalleryTab
+from puzzle_chess.interface import PuzzleChess
 
 from typing import Union, Optional
 from PyQt6.QtCore import QSize, QUrl, Qt, QTimer
@@ -37,6 +38,9 @@ class MainWindow(QMainWindow):
 		
 		self.puzzle_gallery_tab = PuzzleGalleryTab()
 		self.tab.addTab(self.puzzle_gallery_tab.widget, "Gallery")
+
+		self.puzzle_chess = PuzzleChess()
+		self.tab.addTab(self.puzzle_chess.widget, "Chess")
 		
 
 		self.main_layout.addWidget(self.tab)
